@@ -97,6 +97,7 @@ flags.DEFINE_string('testdev_dir', None,
 flags.DEFINE_integer('num_examples_per_epoch', 120000,
                      'Number of examples in one epoch')
 flags.DEFINE_integer('num_epochs', 15, 'Number of epochs for training')
+flags.DEFINE_integer('save_checkpoints_steps', 100, 'Save checkpoint after every n steps')
 flags.DEFINE_string('mode', 'train',
                     'Mode to run: train or eval (default: train)')
 flags.DEFINE_string('model_name', 'efficientdet-d1',
@@ -234,6 +235,9 @@ def main(argv):
       log_step_count_steps=FLAGS.iterations_per_loop,
       session_config=config_proto,
       tpu_config=tpu_config,
+      save_checkpoints_secs=None,
+      save_checkpoints_steps=FLAGS.save_checkpoints_steps,
+      keep_checkpoint_max=6,
   )
 
   model_fn_instance = det_model_fn.get_model_fn(FLAGS.model_name)
