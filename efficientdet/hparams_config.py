@@ -89,7 +89,7 @@ class Config(object):
     else:
       raise ValueError('Unknown value type: {}'.format(config_dict_or_str))
 
-    self._update(config_dict, allow_new_keys=False)
+    self._update(config_dict, allow_new_keys=True)
 
   def parse_from_str(self, config_str):
     """parse from a string in format 'x=a,y=2' and return the dict."""
