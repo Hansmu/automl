@@ -117,6 +117,7 @@ FLAGS = flags.FLAGS
 
 
 def main(argv):
+  print(FLAGS)
   del argv  # Unused.
 
   if FLAGS.use_tpu:
