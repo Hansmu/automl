@@ -97,7 +97,7 @@ flags.DEFINE_string('testdev_dir', None,
                     'COCO testdev dir. If not None, ignorer val_json_file.')
 flags.DEFINE_integer('num_examples_per_epoch', 120000,
                      'Number of examples in one epoch')
-flags.DEFINE_integer('num_epochs', 15, 'Number of epochs for training')
+flags.DEFINE_integer('num_epochs', None, 'Number of epochs for training')
 flags.DEFINE_integer('save_checkpoints_steps', 100, 'Save checkpoint after every n steps')
 flags.DEFINE_string('mode', 'train',
                     'Mode to run: train or eval (default: train)')
@@ -141,6 +141,8 @@ def main(argv):
   # Parse and override hparams
   config = hparams_config.get_detection_config(FLAGS.model_name)
   config.override(FLAGS.hparams)
+  if FLAGS.num_epochs:  # TODO: remove this flag after updating all docs.
+    config.num_epochs = FLAGS.num_epochs
 
   if isinstance(config.image_size, str) and 'x' in config.image_size:
     # image size is in format of width x height.
@@ -206,7 +208,6 @@ def main(argv):
   params = dict(
       config.as_dict(),
       model_name=FLAGS.model_name,
-      num_epochs=FLAGS.num_epochs,
 
       iterations_per_loop=FLAGS.iterations_per_loop,
       model_dir=FLAGS.model_dir,
@@ -260,7 +261,7 @@ def main(argv):
         input_fn=dataloader.InputReader(FLAGS.training_file_pattern,
                                         is_training=True,
                                         use_fake_data=FLAGS.use_fake_data),
-        max_steps=int((FLAGS.num_epochs * FLAGS.num_examples_per_epoch) /
+        max_steps=int((config.num_epochs * FLAGS.num_examples_per_epoch) /
                       FLAGS.train_batch_size))
 
     if FLAGS.eval_after_training:
@@ -336,7 +337,7 @@ def main(argv):
           break
 
         utils.archive_ckpt(eval_results, eval_results['AP'], ckpt)
-        total_step = int((FLAGS.num_epochs * FLAGS.num_examples_per_epoch) /
+        total_step = int((config.num_epochs * FLAGS.num_examples_per_epoch) /
                          FLAGS.train_batch_size)
         if current_step >= total_step:
           logging.info('Evaluation finished after training step %d',
@@ -352,7 +353,7 @@ def main(argv):
                      ckpt)
 
   elif FLAGS.mode == 'train_and_eval':
-    for cycle in range(FLAGS.num_epochs):
+    for cycle in range(config.num_epochs):
       logging.info('Starting training cycle, epoch: %d.', cycle)
       train_estimator = tf.estimator.tpu.TPUEstimator(
           model_fn=model_fn_instance,
