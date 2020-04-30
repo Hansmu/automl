@@ -42,7 +42,7 @@ def update_learning_rate_schedule_parameters(params):
   # Learning rate is proportional to the batch size
   params['adjusted_learning_rate'] = (params['learning_rate'] * batch_size /
                                       _DEFAULT_BATCH_SIZE)
-  print('Adjusted learning rate is: ' + params['adjusted_learning_rate'])
+  print('Adjusted learning rate is: ' + str(params['adjusted_learning_rate']))
   steps_per_epoch = params['num_examples_per_epoch'] / batch_size
   params['lr_warmup_step'] = int(params['lr_warmup_epoch'] * steps_per_epoch)
   params['first_lr_drop_step'] = int(params['first_lr_drop_epoch'] *
