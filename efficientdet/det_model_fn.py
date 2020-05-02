@@ -40,8 +40,7 @@ def update_learning_rate_schedule_parameters(params):
   batch_size = (params['batch_size'] * params['num_shards'] if params['use_tpu']
                 else params['batch_size'])
   # Learning rate is proportional to the batch size
-  params['adjusted_learning_rate'] = (params['learning_rate'] * batch_size /
-                                      _DEFAULT_BATCH_SIZE)
+  params['adjusted_learning_rate'] = params['learning_rate']
   print('Adjusted learning rate is: ' + str(params['adjusted_learning_rate']))
   steps_per_epoch = params['num_examples_per_epoch'] / batch_size
   params['lr_warmup_step'] = int(params['lr_warmup_epoch'] * steps_per_epoch)
