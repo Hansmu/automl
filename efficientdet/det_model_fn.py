@@ -100,6 +100,7 @@ def cosine_lr_schedule(adjusted_lr, lr_warmup_init, lr_warmup_step,
        (adjusted_lr - lr_warmup_init)))
   cosine_lr = 0.5 * adjusted_lr * (
       1 + tf.cos(np.pi * tf.cast(step, tf.float32) / total_steps))
+  print('Cosine lr: ' + str(cosine_lr))
   return tf.where(step < lr_warmup_step, linear_warmup, cosine_lr)
 
 
