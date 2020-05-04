@@ -243,7 +243,7 @@ def main(argv):
       tpu_config=tpu_config,
       save_checkpoints_secs=None,
       save_checkpoints_steps=FLAGS.save_checkpoints_steps,
-      keep_checkpoint_max=6,
+      keep_checkpoint_max=10,
   )
 
   model_fn_instance = det_model_fn.get_model_fn(FLAGS.model_name)
