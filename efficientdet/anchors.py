@@ -268,7 +268,7 @@ def _generate_detections_tf(cls_outputs,
                             min_score_thresh=MIN_SCORE_THRESH,
                             max_boxes_to_draw=MAX_DETECTIONS_PER_IMAGE,
                             soft_nms_sigma=0.0,
-                            iou_threshold=0.2,
+                            iou_threshold=0.6,
                             use_native_nms=True):
   """Generates detections with model outputs and anchors.
 
